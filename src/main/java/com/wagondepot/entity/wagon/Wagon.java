@@ -1,4 +1,4 @@
-package com.wagondepot.entity;
+package com.wagondepot.entity.wagon;
 
 import lombok.*;
 
@@ -26,6 +26,6 @@ public class Wagon {
     @Column(name = "tare_weight")
     private Integer tareWeight;
 
-    private double capacity;
+    private Double capacity;
 }
 

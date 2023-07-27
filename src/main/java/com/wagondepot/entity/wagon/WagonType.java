@@ -1,4 +1,4 @@
-package com.wagondepot.entity;
+package com.wagondepot.entity.wagon;
 
 
 public enum WagonType {

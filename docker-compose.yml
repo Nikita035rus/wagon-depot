@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   app:
-    container_name: "tuktuk"
+    container_name: "wagon-depot"
     build: ./
     ports:
       - "80:80"
@@ -11,9 +11,9 @@ services:
   postgres:
     image: postgres
     restart: always
-    container_name: tuktukDB
+    container_name: depotDB
     ports:
       - "54321:5432"
     environment:
         - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=bazanet
+        - POSTGRES_PASSWORD=depot

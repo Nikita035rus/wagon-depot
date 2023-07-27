@@ -1,2 +1,10 @@
-package com.wagondepot.repositiry;public interface CargoRepository {
+package com.wagondepot.repositiry;
+
+import com.wagondepot.entity.Cargo;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CargoRepository extends JpaRepository<Cargo, Long> {
 }
+
