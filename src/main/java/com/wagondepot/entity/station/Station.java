@@ -18,8 +18,8 @@ public class Station {
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "station_id")
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "station_id", referencedColumnName = "id")
     private List<Way> ways;
 }
 

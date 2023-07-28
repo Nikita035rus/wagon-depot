@@ -4,7 +4,6 @@ import com.wagondepot.model.CargoDto;
 import com.wagondepot.service.CargoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,7 +32,7 @@ public class CargoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete (@PathVariable Long id){
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         cargoService.deleteCargo(id);
         return ResponseEntity.ok("Delete success");
     }

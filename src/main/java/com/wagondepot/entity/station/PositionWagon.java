@@ -1,4 +1,4 @@
-package com.wagondepot.entity;
+package com.wagondepot.entity.station;
 
 import com.wagondepot.entity.wagon.Wagon;
 import lombok.AllArgsConstructor;
@@ -7,19 +7,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ScaleSheet {
+public class PositionWagon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "wagon_id", referencedColumnName = "id")
-    private List<Wagon> wagons;
+    private Integer position;
+
+    @OneToOne
+    @JoinColumn(name = "wagon_id",referencedColumnName = "id")
+    private Wagon wagon;
 }

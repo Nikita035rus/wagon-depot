@@ -1,8 +1,10 @@
 package com.wagondepot.entity;
 
+import com.wagondepot.entity.wagon.Wagon;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Setter
 @Getter
@@ -18,4 +20,8 @@ public class Cargo {
     @Column(name = "code_cargo")
     private String code;
     private String name;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "wagon_id", referencedColumnName = "id")
+    private List<Wagon> wagons;
 }

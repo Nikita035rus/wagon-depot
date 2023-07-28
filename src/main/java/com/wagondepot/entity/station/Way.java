@@ -1,6 +1,5 @@
 package com.wagondepot.entity.station;
 
-import com.wagondepot.entity.wagon.Wagon;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +21,7 @@ public class Way {
 
     private Integer number;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(name = "wagon_id")
-    @JoinColumn(name = "id")
-    private List<Wagon> wagons;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "way_id", referencedColumnName = "id")
+    private List<PositionWagon> positionWagons;
 }

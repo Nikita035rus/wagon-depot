@@ -30,6 +30,19 @@ public class StationController {
         var station = stationService.updateStation(id, stationDto);
         return ResponseEntity.ok(station);
     }
+    @PutMapping("/acceptance/{id}}")
+    public ResponseEntity<StationDto> acceptanceOfWagons(@PathVariable Long id,
+                                                         @RequestBody StationDto stationDto) {
+        var station = stationService.acceptanceOfWagons(id, stationDto);
+        return ResponseEntity.ok(station);
+    }
+
+    @PutMapping("/rearrangement/{id}}")
+    public ResponseEntity<StationDto> rearrangementsOfWagons(@PathVariable Long id,
+                                                         @RequestBody StationDto stationDto) {
+        var station = stationService.rearrangementsOfWagons(id, stationDto);
+        return ResponseEntity.ok(station);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
