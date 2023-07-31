@@ -19,7 +19,7 @@ public class CargoService {
     }
 
     public CargoDto createCargo(CargoDto cargoDto) {
-        Cargo cargo = cargoMapper.toCargo(cargoDto);
+        var cargo = cargoMapper.toCargo(cargoDto);
         return cargoMapper.toCargoDto(cargoRepository.save(cargo));
     }
 
@@ -32,7 +32,7 @@ public class CargoService {
 
     public Cargo findCargoById(Long id) {
         return cargoRepository.findById(id)
-                .orElseThrow(() -> new NoSuchCustomerException("Груз с id: %s отсутствует в БД".formatted(id)));
+                .orElseThrow(() -> new NoSuchCustomerException("Cargo with id: %s is missing in the database".formatted(id)));
     }
 
     public void deleteCargo(Long id) {

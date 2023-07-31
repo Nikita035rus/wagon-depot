@@ -31,7 +31,7 @@ public class WagonService {
 
     public Wagon findWagonById(Long id) {
         return wagonRepository.findById(id)
-                .orElseThrow(() -> new NoSuchCustomerException("Вагон с id: %s отсутствует в БД".formatted(id)));
+                .orElseThrow(() -> new NoSuchCustomerException("Wagon with id: %s is missing in the database".formatted(id)));
     }
 
     public void deleteWagon(Long id) {

@@ -3,8 +3,10 @@ package com.wagondepot.service;
 import com.wagondepot.entity.station.PositionWagon;
 import com.wagondepot.entity.station.Station;
 import com.wagondepot.entity.station.Way;
+import com.wagondepot.entity.wagon.Wagon;
 import com.wagondepot.exception.NoSuchCustomerException;
 import com.wagondepot.mapper.StationMapper;
+import com.wagondepot.model.StationDepartureOfWagonDto;
 import com.wagondepot.model.StationDto;
 import com.wagondepot.repositiry.PositionWagonRepository;
 import com.wagondepot.repositiry.StationRepository;
@@ -12,9 +14,7 @@ import com.wagondepot.repositiry.WayRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,7 +37,8 @@ public class StationService {
     }
 
     public StationDto updateStation(Long id, StationDto stationDto) {
-        var station = findStationById(id);
+        var station = findStationById(id)
+                ;
         stationMapper.updateStation(station, stationDto);
         return stationMapper.toStationDto(stationRepository.save(station));
     }
@@ -54,12 +55,12 @@ public class StationService {
                 .toList();
         for (Way way : station.getWays()) {
             if (numberWays.contains(way.getNumber())) {
-                var positionWagons = way.getPositionWagons();
                 var updatedWay = updatedStationDto.getWays().stream()
                         .filter(x -> x.equals(way))
                         .findFirst()
                         .orElse(null);
                 if (updatedWay != null) {
+                    var positionWagons = way.getPositionWagons();
                     updatedWay.getPositionWagons().forEach(x -> {
                         x.setPosition(positionWagons.size());
                         positionWagons.add(x);
@@ -73,14 +74,21 @@ public class StationService {
 
     private Station findStationById(Long id) {
         return stationRepository.findById(id)
-                .orElseThrow(() -> new NoSuchCustomerException("Станция с id: %s отсутствует в БД".formatted(id)));
+                .orElseThrow(() -> new NoSuchCustomerException("Station with id: %s is missing in the database".formatted(id)));
+    }
+
+    private void updateWayAndSave(Way way, List<PositionWagon> positionWagons) {
+        positionWagons.sort(Comparator.comparingInt(PositionWagon::getPosition));
+        way.setPositionWagons(positionWagons);
+        wayRepository.save(way);
     }
 
     public StationDto rearrangementsOfWagons(Long id, StationDto stationDto) {
         var station = findStationById(id);
         var updatedStation = stationMapper.toStation(stationDto);
         var wayDto = updatedStation.getWays().stream().findFirst().orElse(null);
-        var wayDB = wayRepository.findById(wayDto.getId()).orElseThrow();
+        var wayDB = wayRepository.findById(Objects.requireNonNull(wayDto).getId()).orElseThrow(() -> new RuntimeException("Way not found"));
+
         var positionWagonsDB = wayDB.getPositionWagons();
 
         for (PositionWagon positionWagon : wayDto.getPositionWagons()) {
@@ -93,10 +101,10 @@ public class StationService {
                 positionWagonByWagonId.setPosition(wayDto.getPositionWagons().size());
                 positionWagonsDB.add(positionWagonByWagonId);
             }
-            wayDB.setPositionWagons(positionWagonsDB);
-            wayRepository.save(wayDB);
 
-            var byWagonId = wayRepository.findByWagonId(positionWagon.getWagon().getId()).get();
+            updateWayAndSave(wayDB, positionWagonsDB);
+
+            Way byWagonId = wayRepository.findByWagonId(positionWagon.getWagon().getId()).orElseThrow(() -> new RuntimeException("Way not found"));
             var positionWagons = byWagonId.getPositionWagons().stream()
                     .sorted(Comparator.comparingInt(PositionWagon::getPosition))
                     .collect(Collectors.toList());
@@ -104,9 +112,41 @@ public class StationService {
             for (int i = 0; i < positionWagons.size(); i++) {
                 positionWagons.get(i).setPosition(i);
             }
-            byWagonId.setPositionWagons(positionWagons);
-            wayRepository.save(byWagonId);
+            updateWayAndSave(byWagonId, positionWagons);
         }
         return stationMapper.toStationDto(stationRepository.save(station));
+    }
+
+    public void departureOfWagon(Long id, StationDepartureOfWagonDto stationDto) {
+        var station = findStationById(id);
+        List<Wagon> wagonsValid = stationDto.wagons();
+        wagonsValid.forEach(x -> {
+            PositionWagon positionWagon = positionWagonRepository.findPositionWagonByWagon_Id(x.getId());
+            if (positionWagon.getWagon() != null) { // Проверка на наличие вагона
+                Way way = wayRepository.findByWagonId(positionWagon.getWagon().getId()).get();
+                // ... остальной код ...
+            } else {
+                throw new RuntimeException("Wagon is null for PositionWagon with ID: " + positionWagon.getId());
+            }
+        });
+        List<Wagon> wagons = stationDto.wagons();
+        wagons.forEach(x -> {
+            PositionWagon positionWagon = positionWagonRepository.findPositionWagonByWagon_Id(x.getId());
+            Way way = wayRepository.findByWagonId(positionWagon.getWagon().getId()).orElseThrow(() -> new RuntimeException("Way not found"));
+            List<PositionWagon> positionWagons = new ArrayList<>(way.getPositionWagons()
+                    .stream()
+                    .sorted(Comparator.comparingInt(PositionWagon::getPosition))
+                    .toList());
+
+            if (positionWagon.getPosition().equals(positionWagons.size() - 1) || positionWagon.getPosition() == 0) {
+                positionWagons.remove(positionWagon);
+                for (int i = 0; i < positionWagons.size(); i++) {
+                    positionWagons.get(i).setPosition(i);
+                }
+                updateWayAndSave(way, positionWagons);
+            } else {
+                throw new RuntimeException("The wagon is in the middle of the train");
+            }
+        });
     }
 }

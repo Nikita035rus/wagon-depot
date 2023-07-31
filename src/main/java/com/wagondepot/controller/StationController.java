@@ -1,5 +1,6 @@
 package com.wagondepot.controller;
 
+import com.wagondepot.model.StationDepartureOfWagonDto;
 import com.wagondepot.model.StationDto;
 import com.wagondepot.service.StationService;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,13 @@ public class StationController {
                                                              @RequestBody StationDto stationDto) {
         var station = stationService.rearrangementsOfWagons(id, stationDto);
         return ResponseEntity.ok(station);
+    }
+
+    @DeleteMapping("/depart/{id}")
+    public ResponseEntity<?> departureOfWagons(@PathVariable Long id,
+                                              @RequestBody StationDepartureOfWagonDto stationDto) {
+        stationService.departureOfWagon(id, stationDto);
+        return ResponseEntity.ok("Delete success");
     }
 
     @DeleteMapping("/{id}")

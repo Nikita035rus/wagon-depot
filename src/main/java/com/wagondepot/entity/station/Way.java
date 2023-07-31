@@ -1,9 +1,6 @@
 package com.wagondepot.entity.station;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Way {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

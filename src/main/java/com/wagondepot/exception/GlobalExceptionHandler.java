@@ -19,10 +19,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(NullPointerException.class)
+    @ExceptionHandler(NoSuchCustomerException.class)
     public ResponseEntity<?> handleNoSuchCustomerException(NoSuchCustomerException ex) {
         Map<String, String> errors = new LinkedHashMap<>();
-        errors.put("status", HttpStatus.I_AM_A_TEAPOT.name());
+        errors.put("status", HttpStatus.NOT_FOUND.name());
         errors.put("massage", ex.getMessage());
         errors.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);

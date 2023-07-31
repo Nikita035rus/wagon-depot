@@ -19,7 +19,7 @@ public class ScaleSheetService {
     }
 
     public ScaleSheetDto createScaleSheet(ScaleSheetDto scaleSheetDto) {
-        ScaleSheet scaleSheet = scaleSheetMapper.toScaleSheet(scaleSheetDto);
+        var scaleSheet = scaleSheetMapper.toScaleSheet(scaleSheetDto);
         return scaleSheetMapper.toScaleSheetDto(scaleSheetRepository.save(scaleSheet));
     }
 
@@ -32,7 +32,7 @@ public class ScaleSheetService {
 
     public ScaleSheet findScaleSheetById(Long id) {
         return scaleSheetRepository.findById(id)
-                .orElseThrow(() -> new NoSuchCustomerException("Груз с id: %s отсутствует в БД".formatted(id)));
+                .orElseThrow(() -> new NoSuchCustomerException("ScaleSheet with id: %s is missing in the database".formatted(id)));
     }
 
     public void deleteScaleSheet(Long id) {
