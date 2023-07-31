@@ -2,14 +2,11 @@ package com.wagondepot.mapper;
 
 import com.wagondepot.entity.Cargo;
 import com.wagondepot.model.CargoDto;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "string")
+@Mapper(componentModel = "spring")
 public interface CargoMapper {
 
     CargoDto toCargoDto (Cargo cargo);

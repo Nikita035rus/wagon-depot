@@ -1,6 +1,5 @@
 package com.wagondepot.mapper;
 
-
 import com.wagondepot.entity.wagon.Wagon;
 import com.wagondepot.model.WagonDto;
 
@@ -11,7 +10,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
-@Mapper(componentModel = "string")
+@Mapper(componentModel = "spring")
 public interface WagonMapper {
 
     WagonDto toWagonDto(Wagon Wagon);

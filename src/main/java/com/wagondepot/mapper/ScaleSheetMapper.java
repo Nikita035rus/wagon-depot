@@ -9,7 +9,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
-@Mapper(componentModel = "string")
+@Mapper(componentModel = "spring")
 public interface ScaleSheetMapper {
 
     ScaleSheetDto toScaleSheetDto (ScaleSheet scaleSheet);

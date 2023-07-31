@@ -3,16 +3,17 @@ package com.wagondepot.controller;
 import com.wagondepot.model.StationDto;
 import com.wagondepot.service.StationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/station")
+@RequestMapping(value = "/api/station", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StationController {
     private final StationService stationService;
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<StationDto> getStation(@PathVariable Long id) {
         var stationById = stationService.getStationById(id);
         return ResponseEntity.ok(stationById);
@@ -24,22 +25,23 @@ public class StationController {
         return ResponseEntity.ok(station);
     }
 
-    @PutMapping("/{id}}")
+    @PutMapping("/{id}")
     public ResponseEntity<StationDto> updateStation(@PathVariable Long id,
                                                     @RequestBody StationDto stationDto) {
         var station = stationService.updateStation(id, stationDto);
         return ResponseEntity.ok(station);
     }
-    @PutMapping("/acceptance/{id}}")
+
+    @PutMapping("/acceptance/{id}")
     public ResponseEntity<StationDto> acceptanceOfWagons(@PathVariable Long id,
                                                          @RequestBody StationDto stationDto) {
         var station = stationService.acceptanceOfWagons(id, stationDto);
         return ResponseEntity.ok(station);
     }
 
-    @PutMapping("/rearrangement/{id}}")
+    @PutMapping("/rearrangement/{id}")
     public ResponseEntity<StationDto> rearrangementsOfWagons(@PathVariable Long id,
-                                                         @RequestBody StationDto stationDto) {
+                                                             @RequestBody StationDto stationDto) {
         var station = stationService.rearrangementsOfWagons(id, stationDto);
         return ResponseEntity.ok(station);
     }

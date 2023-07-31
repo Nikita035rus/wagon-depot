@@ -3,12 +3,13 @@ package com.wagondepot.controller;
 import com.wagondepot.model.ScaleSheetDto;
 import com.wagondepot.service.ScaleSheetService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/ScaleSheet")
+@RequestMapping(value = "/api/scaleSheet", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ScaleSheetController {
     private final ScaleSheetService scaleSheetService;
 
@@ -24,7 +25,7 @@ public class ScaleSheetController {
         return ResponseEntity.ok(ScaleSheetResponse);
     }
 
-    @PutMapping("/{id}}")
+    @PutMapping("/{id}")
     public ResponseEntity<ScaleSheetDto> updateScaleSheet(@PathVariable Long id,
                                                 @RequestBody ScaleSheetDto ScaleSheetRequest) {
         var ScaleSheetResponse = scaleSheetService.updateScaleSheet(id, ScaleSheetRequest);
