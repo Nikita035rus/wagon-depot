@@ -122,10 +122,7 @@ public class StationService {
         List<Wagon> wagonsValid = stationDto.wagons();
         wagonsValid.forEach(x -> {
             PositionWagon positionWagon = positionWagonRepository.findPositionWagonByWagon_Id(x.getId());
-            if (positionWagon.getWagon() != null) { // Проверка на наличие вагона
-                Way way = wayRepository.findByWagonId(positionWagon.getWagon().getId()).get();
-                // ... остальной код ...
-            } else {
+            if (positionWagon.getWagon() == null) {
                 throw new RuntimeException("Wagon is null for PositionWagon with ID: " + positionWagon.getId());
             }
         });
